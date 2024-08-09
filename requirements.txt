@@ -7,4 +7,9 @@ scikit-learn
 seaborn
 catboost
 xgboost
-# -e .
+Flask
+dill
+mlflow==2.2.2
+dagshub
+
+-e .
