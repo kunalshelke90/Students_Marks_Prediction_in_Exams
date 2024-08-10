@@ -5,7 +5,7 @@ from catboost import CatBoostRegressor
 from sklearn.ensemble import (AdaBoostRegressor,GradientBoostingRegressor,RandomForestRegressor)
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
-from sklearn.neighbors import KNeighborsRegressor
+
 from sklearn.tree import DecisionTreeRegressor
 from xgboost import XGBRegressor
 from src.mlproject.exception import CustomException
@@ -24,7 +24,7 @@ dagshub.init(repo_owner='shelkekunal90', repo_name='mlproject', mlflow=True)
 
 class ModelTrainerConfig:
     trained_model_file_path=os.path.join("artifact",'model.pkl')
-    
+    best_model_name = "" 
     
 class ModelTrainer:
     def __init__(self):
@@ -82,6 +82,7 @@ class ModelTrainer:
                     'n_estimators': [8,16,32,64,128,256]
                 },
                 "Linear Regression":{},
+                
                 "XGBRegressor":{
                     'learning_rate':[.1,.01,.05,.001],
                     'n_estimators': [8,16,32,64,128,256]
@@ -95,8 +96,7 @@ class ModelTrainer:
                     'learning_rate':[.1,.01,0.5,.001],
                     # 'loss':['linear','square','exponential'],
                     'n_estimators': [8,16,32,64,128,256]
-                }
-                
+                }  
             }
 
             model_report:dict=evaluate_models(X_train,y_train,X_test,y_test,models,params)
@@ -111,13 +111,15 @@ class ModelTrainer:
                 list(model_report.values()).index(best_model_score)
             ]
             best_model = models[best_model_name]
+            
 
             # predicted_qualities = best_model.predict(X_test)
             # print(f"NaNs in predicted_qualities: {np.isnan(predicted_qualities).sum()}, infs in predicted_qualities: {np.isinf(predicted_qualities).sum()}")
 
             print("This is the best model:")
             print(best_model_name)
-
+            self.model_trainer_config.best_model_name=best_model_name
+            
             model_names = list(params.keys())
 
             actual_model=""
@@ -133,7 +135,7 @@ class ModelTrainer:
 
             # mlflow
 
-            with mlflow.start_run():
+            with mlflow.start_run(nested=True):
 
                 predicted_qualities = best_model.predict(X_test)
 

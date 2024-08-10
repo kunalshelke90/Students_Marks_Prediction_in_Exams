@@ -1,0 +1,19 @@
+<!-- templates/train.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Training</title>
+</head>
+<body>
+    <h1>Model Training</h1>
+    <form action="/train" method="post">
+        <button type="submit">Start Training</button>
+    </form>
+    <h2>Results</h2>
+    <p>R2 Score: {{ r2_score }}</p>
+    <p>Best Model: {{ best_model }}</p>
+    <p>Training Status: {{ status }}</p>
+</body>
+</html>
