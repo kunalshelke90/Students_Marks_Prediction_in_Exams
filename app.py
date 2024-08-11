@@ -71,4 +71,4 @@ def train():
         return render_template('train.html', r2_score="N/A", best_model="N/A", status="")
 
 if __name__=="__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0",port=8080)
