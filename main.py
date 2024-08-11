@@ -8,8 +8,6 @@ application=Flask(__name__)
 
 app=application
 
-## Route for a home page
-
 @app.route('/')
 def index():
     return render_template('index.html') 
@@ -43,20 +41,16 @@ def predict_datapoint():
 def train():
     if request.method == 'POST':
         try:
-            # Initialize DataTransformation
             data_transformation = DataTransformation()
-
-            # Paths to the CSV files
+ 
             train_csv_path = os.path.join('artifact', 'train.csv')
             test_csv_path = os.path.join('artifact', 'test.csv')
 
-            # Transform the data
             train_arr, test_arr, _ = data_transformation.initiate_data_transformation(
                 train_path=train_csv_path,
                 test_path=test_csv_path
             )
 
-            # Initialize ModelTrainer and train the model
             model_trainer = ModelTrainer()
             model_trainer_config=ModelTrainerConfig()
             r2_score = model_trainer.initiate_model_trainer(train_arr, test_arr)
@@ -71,4 +65,31 @@ def train():
         return render_template('train.html', r2_score="N/A", best_model="N/A", status="")
 
 if __name__=="__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0",debug=True)        # 127.0.0.1:5000
+    
+    
+    
+    # from src.mlproject.logger import logging
+# from src.mlproject.exception import CustomException
+# from src.mlproject.components.data_ingestion import DataIngestion,DataIngestionConfig 
+# from src.mlproject.components.data_transformation import DataTransformationConfig,DataTransformation
+# from src.mlproject.components.model_trainer import ModelTrainer,ModelTrainerConfig
+# import sys
+
+# # if __name__=="__ main__ ":
+# logging.info("The execution has started")
+# try:
+#     #data_ingestion_config=DataIngestionConfig()
+#     data_ingestion=DataIngestion ()
+#     train_data_path,test_data_path=data_ingestion.initiate_data_ingestion()
+    
+#     # data_transformation_config=DataIngestionConfig()
+#     data_transformation=DataTransformation()
+#     train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data_path,test_data_path)
+    
+    
+#     model_trainer=ModelTrainer()
+#     model_trainer.initiate_model_trainer(train_arr,test_arr)
+# except Exception as e:
+#     logging.info("Custom Exception")
+#     raise CustomException(e,sys)
